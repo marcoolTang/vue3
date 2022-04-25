@@ -11,21 +11,37 @@
         <script>
 
 
-            let obj = {name:"zf",age:13}
-            const { reactive, effect } = VueReactivity;
-            const state1 = reactive(obj);
-            const state2 = reactive(obj)
+            let obj = {name:"Lenovo",age:12}
+            const { reactive, effect ,complier, computed} = VueReactivity;
+            const state = reactive(obj)
+            // const state1 = reactive(obj);
+            // const state2 = reactive(obj)
 
-            console.log(state2 === state1,reactive(state1) === state1)
+            // console.log(state2 === state1,reactive(state1) === state1)
 
-            //effcet会默认执行一次
-            effect(()=>{
-                app.innerHTML = state.name + '今年' + state.age + "岁了"
+            //effcet会默认执行一次 使用数据更新了 会再次执行
+            // effect(()=>{
+            //     app.innerHTML = state.name + '今年' + state.age + "岁了"
+            // })
+            
+            //compute默认不会执行 只有取值的时候才执行
+            const myAge = computed({//计算属性的缓存 dirty = false
+                get(){
+                    console.log('runner');
+                    return state.age +18;
+                },
+                set(value){
+                    console.log(value)
+                }
             })
-
-            // setTimeout(()=>{
-            //     state.age = 22
-            // },3000)
+            effect(()=>{
+                console.log(myAge.value)
+            })
+          
+            // 如果依赖的值没有发生变化 不会重新执行
+            setTimeout(()=>{
+                state.age = 22
+            },1000)
 
 
         </script>
