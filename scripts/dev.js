@@ -3,7 +3,7 @@ const execa = require("execa");
 
 const args = minimist(process.argv.slice(2));
 
-const target = args.length? args._[0] : 'reactivity';
+const target = args.length? args._[0] : 'runtime-dom';
 
 const formarts = args.f || "global";
 

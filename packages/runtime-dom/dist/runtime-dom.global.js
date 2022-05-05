@@ -1,4 +1,4 @@
-var VueReactivity = (function (exports) {
+var VueRuntimeCore = (function (exports) {
   'use strict';
 
   // effect(()=>{
@@ -250,4 +250,4 @@ var VueReactivity = (function (exports) {
   return exports;
 
 })({});
-//# sourceMappingURL=reactivity.global.js.map
+//# sourceMappingURL=runtime-dom.global.js.map

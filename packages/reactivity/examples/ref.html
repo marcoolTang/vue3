@@ -12,23 +12,16 @@
 
 
             let obj = {name:"Lenovo",age:12}
-            const { reactive, effect ,complier, computed} = VueReactivity;
-            const state = reactive(obj)
-            // const state1 = reactive(obj);
-            // const state2 = reactive(obj)
-
-            // console.log(state2 === state1,reactive(state1) === state1)
-
-            //effcet会默认执行一次 使用数据更新了 会再次执行
+            const { reactive, effect ,complier, computed, ref} = VueReactivity;
+            const state = ref(0)
             effect(()=>{
-                app.innerHTML = state.name + '今年' + state.age + "岁了"
+                console.log(state.value)
             })
-            
-          
+
           
             // 如果依赖的值没有发生变化 不会重新执行
             setTimeout(()=>{
-                state.age = 22
+                state.value ++
             },1000)
 
 

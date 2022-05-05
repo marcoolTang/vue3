@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <div id="app"></div>
+        <script src="../dist/reactivity.global.js"></script>
+        <script>
+
+
+            let obj = {name:"Lenovo",age:12}
+            const { reactive, effect ,complier, computed} = VueReactivity;
+            const state = reactive(obj)
+        
+            //1。计算属性是一个effect dirty =true
+            //2. 计算属性的依赖属性会收集这个effect
+            //3.计算属性具备依赖手机的功能 会收集对应的effect方法
+            //4. 第一次执行effect时会取compputed的值  将设置dirty= false；此时
+            //此时多次执行走缓存
+
+            //5.计算属性的依赖值发生了变化 将设置dirty =true 触发计算属性收集
+            //的effect。再次取计算属性的值 因为dirty为true 会重新计算
+
+
+            //compute默认不会执行 只有取值的时候才执行
+            const myAge = computed({//计算属性的缓存 dirty = false
+                get(){
+                    console.log('runner');
+                    return state.age +18;
+                },
+                set(value){
+                    console.log(value)
+                }
+            })
+            effect(()=>{
+                //计算机属性本身不会变化
+                console.log(myAge.value);
+                console.log(myAge.value)
+                console.log(myAge.value)
+            })
+          
+            // 如果依赖的值没有发生变化 不会重新执行
+            setTimeout(()=>{
+                state.age = 22
+            },1000)
+
+
+        </script>
+</body>
+</html>

@@ -20,7 +20,7 @@ let activeEffect;
 export class ReactiveEffect{//让effect记录他依赖了哪些属性 同时还要记录属性依赖了哪些方法
     active = true;//让effect 记录了哪些属性 同事记录了当前属性依赖了那个effect
     deps = [];//
-    constructor(public fn){//public作用 this.fn = fn
+    constructor(public fn, public scheduler?){//public作用 this.fn = fn
 
     }
     
@@ -72,11 +72,15 @@ export function track(target,key){//收集数据变化 1个属性对应多个eff
     if(!dep){
         depsMap.set(key, (dep = new Set()))//{对象：map｛name：set【】｝}
     }
+    trackEffects(dep);
+}
+
+export function trackEffects(dep){
     let shouldTrack = !dep.has(activeEffect);//看一下这个属性有没有存过effcet
     if(shouldTrack){
         dep.add(activeEffect)// {obj:map{name:set[effect,effect]}}
         activeEffect.deps.push(dep);//稍后用到 
-    }
+    }//{对象：｛name：set，age：set｝}
 }
 
 export function trigger(target,key){
@@ -92,9 +96,15 @@ export function trigger(target,key){
     for(const dep of deps){
         effects.push(...dep)
     }
+    triggerEffects(effects)
+}
 
-    for(const effect of effects){//如果当前effect执行和要执行的effect是同一个 不要执行防止死循环
+export function triggerEffects(dep){
+    for(const effect of dep){//如果当前effect执行和要执行的effect是同一个 不要执行防止死循环
         if(effect !== activeEffect){
+            if(effect.scheduler){
+                return effect.scheduler();
+            }
             effect.run();//执行effect
         }
 
